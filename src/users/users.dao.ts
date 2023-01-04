@@ -1,18 +1,11 @@
 import { v4 as uuid } from "uuid";
 import { User, UserData } from "../common/common.types";
-
-const initial = {
-  login: "smithereens@joji.com",
-  password: "smithereens",
-  age: 28,
-  id: "db32bb35-2201-400e-b861-ddcc2e460ae3",
-  isDeleted: false,
-};
+import initial from "./users.mocks";
 
 const allowedFields = ["login", "password", "age"];
 
 class Users {
-  users: Array<User> = [initial];
+  users: Array<User> = [...initial];
 
   constructor() {
     console.log("users new instance created");

@@ -1,11 +1,18 @@
 import express from "express";
+import { ValidatedRequest } from "express-joi-validation";
+import {
+  UserAutoSuggestRequestSchema,
+  UserPatchRequestSchema,
+  UserPostRequestSchema,
+} from "../common/common.types";
 import { isEmpty } from "../common/common.utils";
 import usersService from "./users.service";
 
-// validation ?
-
 class UsersController {
-  getUsers(req: express.Request, res: express.Response) {
+  getUsers(
+    req: ValidatedRequest<UserAutoSuggestRequestSchema>,
+    res: express.Response
+  ) {
     const login = isEmpty(req.query) ? "" : String(req.query.login);
     const limit = isEmpty(req.query)
       ? undefined
@@ -22,7 +29,10 @@ class UsersController {
     res.status(200).send(user);
   }
 
-  patchUser(req: express.Request, res: express.Response) {
+  patchUser(
+    req: ValidatedRequest<UserPatchRequestSchema>,
+    res: express.Response
+  ) {
     const { id } = req.params;
     const data = req.body;
     const result = usersService.updateById(id, data);
@@ -35,7 +45,10 @@ class UsersController {
     res.status(200).send(result);
   }
 
-  createUser(req: express.Request, res: express.Response) {
+  createUser(
+    req: ValidatedRequest<UserPostRequestSchema>,
+    res: express.Response
+  ) {
     const data = req.body;
     const id = usersService.create(data);
     res.status(200).send(id);

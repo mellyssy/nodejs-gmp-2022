@@ -5,7 +5,7 @@ import { UsersRoutes } from "./users/users.routes.config";
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
-const port = 3002;
+const port = 3030;
 const routes: CommonRoutesConfig[] = [];
 
 app.use(express.json());
