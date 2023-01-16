@@ -1,7 +1,6 @@
 import express from "express";
 import { ValidatedRequest } from "express-joi-validation";
 import {
-  UserAutoSuggestRequestSchema,
   UserPatchRequestSchema,
   UserPostRequestSchema,
 } from "../common/common.types";
@@ -9,24 +8,26 @@ import { isEmpty } from "../common/common.utils";
 import usersService from "./users.service";
 
 class UsersController {
-  getUsers(
-    req: ValidatedRequest<UserAutoSuggestRequestSchema>,
-    res: express.Response
-  ) {
-    const login = isEmpty(req.query) ? "" : String(req.query.login);
-    const limit = isEmpty(req.query)
-      ? undefined
-      : typeof req.query.limit !== "number"
-      ? undefined
-      : req.query.limit;
+  getUsers(req: express.Request, res: express.Response) {
+    let login = "";
+    let limit = undefined;
+
+    if (!isEmpty(req.query)) {
+      login = String(req.query.login);
+
+      if (typeof req.query.limit === "number") {
+        limit = req.query.limit;
+      }
+    }
+
     const users = usersService.autosuggest(login, limit);
-    res.status(200).send(users);
+    res.status(200).json(users);
   }
 
   getUser(req: express.Request, res: express.Response) {
     const { id } = req.params;
     const user = usersService.readById(id);
-    res.status(200).send(user);
+    res.status(200).json(user);
   }
 
   patchUser(
@@ -51,7 +52,7 @@ class UsersController {
   ) {
     const data = req.body;
     const id = usersService.create(data);
-    res.status(200).send(id);
+    res.status(201).send(id);
   }
 }
 
