@@ -2,10 +2,11 @@
   "name": "nodejs-gmp-2022",
   "version": "1.0.0",
   "description": "node.js global mentoring program homeworks ",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
-    "task1": "babel src/reverse.js -d dist && nodemon dist/reverse.js",
-    "task2": "babel src/transform.js -d dist && nodemon dist/transform.js"
+    "lint": "eslint . --ext .ts",
+    "start": "ts-node-dev src/app.ts",
+    "build": "tsc && node dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -21,12 +22,19 @@
   },
   "homepage": "https://github.com/mellyssy/nodejs-gmp-2022#readme",
   "devDependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.5",
-    "@babel/preset-env": "^7.20.2",
-    "nodemon": "^2.0.20"
+    "@types/express": "^4.17.15",
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
+    "eslint": "^8.31.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.9.4"
   },
   "dependencies": {
-    "csvtojson": "^2.0.10"
+    "csvtojson": "^2.0.10",
+    "express": "^4.18.2",
+    "express-joi-validation": "^5.0.1",
+    "joi": "^17.7.0",
+    "uuid": "^9.0.0"
   }
 }
