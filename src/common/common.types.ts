@@ -1,22 +1,23 @@
 import { ValidatedRequestSchema, ContainerTypes } from "express-joi-validation";
+import { Optional } from "sequelize";
 
 export interface User {
   id: string;
   login: string;
   password: string;
   age: number;
-  isDeleted: boolean;
+  isdeleted: boolean;
 }
 
-export interface UserData extends Omit<User, "id" | "isDeleted"> {}
+export type UserCreationAttributes = Optional<User, "id" | "isdeleted">;
 
 // schema interfaces
 export interface UserPostRequestSchema extends ValidatedRequestSchema {
-  [ContainerTypes.Body]: UserData;
+  [ContainerTypes.Body]: UserCreationAttributes;
 }
 
 export interface UserPatchRequestSchema extends ValidatedRequestSchema {
-  [ContainerTypes.Body]: Partial<UserData>;
+  [ContainerTypes.Body]: UserCreationAttributes;
   [ContainerTypes.Params]: {
     id: string;
   };

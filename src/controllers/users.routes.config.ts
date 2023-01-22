@@ -1,7 +1,7 @@
 import express from "express";
 import * as Joi from "joi";
 import { createValidator } from "express-joi-validation";
-import { CommonRoutesConfig } from "../common/common.routes.config";
+import { CommonRoutesConfig } from "../config/common.routes.config";
 import usersController from "./users.controller";
 
 const validator = createValidator();
