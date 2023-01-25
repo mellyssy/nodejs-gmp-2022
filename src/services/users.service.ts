@@ -1,10 +1,14 @@
-import { CRUD } from "../common/crud.interface";
+import { CRUD, WithAutosuggest } from "../common/crud.interface";
 import { UserCreationAttributes } from "../common/common.types";
 import Users from "../data-access/users.dao";
 
-class UserService implements CRUD {
+class UserService implements CRUD, WithAutosuggest {
   create(resource: UserCreationAttributes) {
     return Users.createUser(resource);
+  }
+
+  async getAll() {
+    return await Users.getAllUsers();
   }
 
   async autosuggest(substr: string, limit: number) {

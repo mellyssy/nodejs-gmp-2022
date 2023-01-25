@@ -1,4 +1,4 @@
-import express from "express";
+import Router from "express";
 import * as Joi from "joi";
 import { createValidator } from "express-joi-validation";
 import { CommonRoutesConfig } from "../config/common.routes.config";
@@ -19,8 +19,9 @@ const updateUserSchema = Joi.object({
 });
 
 export class UsersRoutes extends CommonRoutesConfig {
-  constructor(app: express.Application) {
-    super(app, "UsersRoutes");
+  constructor() {
+    super("UsersRoutes");
+    this.app = Router();
   }
 
   configureRoutes() {

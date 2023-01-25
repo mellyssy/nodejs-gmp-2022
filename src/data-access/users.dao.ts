@@ -33,9 +33,13 @@ class Users {
   }
 
   async deleteUser(id: string) {
-    return await User.destroy({
-      where: { id },
-    });
+    const user = await User.findByPk(id);
+    if (!user) return false;
+
+    user.set({ isdeleted: true });
+    await user.save();
+
+    return true;
   }
 
   async getAutoSuggestUsers(substr = "", limit?: number) {
@@ -46,6 +50,14 @@ class Users {
         },
       },
       limit,
+      order: [["login", "ASC"]],
+    });
+
+    return users;
+  }
+
+  async getAllUsers() {
+    const users = await User.findAll({
       order: [["login", "ASC"]],
     });
 

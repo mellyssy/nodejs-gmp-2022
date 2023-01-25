@@ -48,7 +48,7 @@ class UsersController {
   async deleteUser(req: express.Request, res: express.Response) {
     const { id } = req.params;
     const result = await usersService.deleteById(id);
-    res.status(200).send(Boolean(result));
+    res.status(200).send(result);
   }
 
   async createUser(
