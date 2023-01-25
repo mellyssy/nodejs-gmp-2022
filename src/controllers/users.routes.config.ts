@@ -1,26 +1,28 @@
-import express from "express";
+import Router from "express";
 import * as Joi from "joi";
 import { createValidator } from "express-joi-validation";
-import { CommonRoutesConfig } from "../common/common.routes.config";
+import { CommonRoutesConfig } from "../config/common.routes.config";
 import usersController from "./users.controller";
 
 const validator = createValidator();
+const passwordRegEx = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/g;
 
 const createUserSchema = Joi.object({
   login: Joi.string().required(),
-  password: Joi.string().alphanum().required(),
+  password: Joi.string().pattern(passwordRegEx).required(),
   age: Joi.number().integer().min(4).max(130).required(),
 });
 
 const updateUserSchema = Joi.object({
   login: Joi.string(),
-  password: Joi.string().alphanum(),
+  password: Joi.string().pattern(passwordRegEx),
   age: Joi.number().integer().min(4).max(130),
 });
 
 export class UsersRoutes extends CommonRoutesConfig {
-  constructor(app: express.Application) {
-    super(app, "UsersRoutes");
+  constructor() {
+    super("UsersRoutes");
+    this.app = Router();
   }
 
   configureRoutes() {

@@ -5,53 +5,58 @@ import {
   UserPostRequestSchema,
 } from "../common/common.types";
 import { isEmpty } from "../common/common.utils";
-import usersService from "./users.service";
+import usersService from "../services/users.service";
 
 class UsersController {
-  getUsers(req: express.Request, res: express.Response) {
+  async getUsers(req: express.Request, res: express.Response) {
     let login = "";
     let limit = undefined;
 
     if (!isEmpty(req.query)) {
       login = String(req.query.login);
 
-      if (typeof req.query.limit === "number") {
-        limit = req.query.limit;
+      if (req.query.limit && Number(req.query.limit) > 0) {
+        limit = Number(req.query.limit);
       }
     }
 
-    const users = usersService.autosuggest(login, limit);
+    const users = await usersService.autosuggest(login, limit);
     res.status(200).json(users);
   }
 
-  getUser(req: express.Request, res: express.Response) {
+  async getUser(req: express.Request, res: express.Response) {
     const { id } = req.params;
-    const user = usersService.readById(id);
+    const user = await usersService.readById(id);
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
+
     res.status(200).json(user);
   }
 
-  patchUser(
+  async patchUser(
     req: ValidatedRequest<UserPatchRequestSchema>,
     res: express.Response
   ) {
     const { id } = req.params;
     const data = req.body;
-    const result = usersService.updateById(id, data);
+    const result = await usersService.updateById(id, data);
     res.status(200).send(result);
   }
 
-  deleteUser(req: express.Request, res: express.Response) {
+  async deleteUser(req: express.Request, res: express.Response) {
     const { id } = req.params;
-    const result = usersService.deleteById(id);
+    const result = await usersService.deleteById(id);
     res.status(200).send(result);
   }
 
-  createUser(
+  async createUser(
     req: ValidatedRequest<UserPostRequestSchema>,
     res: express.Response
   ) {
     const data = req.body;
-    const id = usersService.create(data);
+    const id = await usersService.create(data);
     res.status(201).send(id);
   }
 }

@@ -1,16 +1,21 @@
 import express from "express";
 import * as http from "http";
-import { CommonRoutesConfig } from "./common/common.routes.config";
-import { UsersRoutes } from "./users/users.routes.config";
+import { UsersRoutes } from "./controllers/users.routes.config";
+import config from "./config";
+import { sequelize } from "./models/users.model";
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
-const port = 3030;
-const routes: CommonRoutesConfig[] = [];
+const port = config.port;
 
 app.use(express.json());
 
-routes.push(new UsersRoutes(app));
+sequelize.sync().then(() => {
+  console.log("All models were synchronized successfully.");
+});
+
+const usersRoutes = new UsersRoutes();
+app.use(usersRoutes.configureRoutes());
 
 app.get("/", (req: express.Request, res: express.Response) => {
   res.status(200).send(`Hello world`);
